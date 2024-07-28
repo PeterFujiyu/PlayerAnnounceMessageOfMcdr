@@ -4,9 +4,9 @@ import os
 import json
 
 PLUGIN_METADATA = {
-    'id': 'announce_player',
-    'version': '1.5.1',
-    'name': 'Announce Player',
+    'id': 'announce_owner',
+    'version': '1.6.0',
+    'name': 'Announce Owner',
     'author': 'Peter',
     'link': 'github.com/PeterFujiyu'
 }
@@ -73,11 +73,11 @@ def on_load(server: ServerInterface, old_module):
         .then(Literal('off')
             .runs(lambda src: toggle_msg(src, False)))
         .then(Literal('online_change')
-            .then(Text('message')
+            .then(GreedyText('message')
                 .then(Text('color')
                     .runs(lambda src, ctx: change_online_msg(src, ctx['message'], ctx['color'])))))
         .then(Literal('offline_change')
-            .then(Text('message')
+            .then(GreedyText('message')
                 .then(Text('color')
                     .runs(lambda src, ctx: change_offline_msg(src, ctx['message'], ctx['color'])))))
         .then(Literal('ban')
@@ -88,12 +88,12 @@ def on_load(server: ServerInterface, old_module):
                 .runs(lambda src, ctx: unban_player(src, ctx['player']))))
         .then(Literal('force_online_change')
             .then(Text('player')
-                .then(Text('message')
+                .then(GreedyText('message')
                     .then(Text('color')
                         .runs(lambda src, ctx: force_change_online_msg(src, ctx['player'], ctx['message'], ctx['color']))))))
         .then(Literal('force_offline_change')
             .then(Text('player')
-                .then(Text('message')
+                .then(GreedyText('message')
                     .then(Text('color')
                         .runs(lambda src, ctx: force_change_offline_msg(src, ctx['player'], ctx['message'], ctx['color']))))))
     )

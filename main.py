@@ -4,9 +4,9 @@ import os
 import json
 
 PLUGIN_METADATA = {
-    'id': 'announce_owner',
-    'version': '1.6.0',
-    'name': 'Announce Owner',
+    'id': 'announce_player',
+    'version': '1.6.2',
+    'name': 'Announce Player',
     'author': 'Peter',
     'link': 'github.com/PeterFujiyu'
 }
@@ -63,146 +63,7 @@ def on_player_left(server: ServerInterface, player: str):
         custom_color = player_config.get('color_offline', 'white')
         out_msg(server, custom_msg, custom_color)
 
-def on_load(server: ServerInterface, old_module):
-    server.register_event_listener('minecraft.player.join', on_player_joined)
-    server.register_event_listener('minecraft.player.leave', on_player_left)
-    server.register_command(
-        Literal('!!msg')
-        .then(Literal('on')
-            .runs(lambda src: toggle_msg(src, True)))
-        .then(Literal('off')
-            .runs(lambda src: toggle_msg(src, False)))
-        .then(Literal('online_change')
-            .then(GreedyText('message')
-                .then(Text('color')
-                    .runs(lambda src, ctx: change_online_msg(src, ctx['message'], ctx['color'])))))
-        .then(Literal('offline_change')
-            .then(GreedyText('message')
-                .then(Text('color')
-                    .runs(lambda src, ctx: change_offline_msg(src, ctx['message'], ctx['color'])))))
-        .then(Literal('ban')
-            .then(Text('player')
-                .runs(lambda src, ctx: ban_player(src, ctx['player']))))
-        .then(Literal('unban')
-            .then(Text('player')
-                .runs(lambda src, ctx: unban_player(src, ctx['player']))))
-        .then(Literal('force_online_change')
-            .then(Text('player')
-                .then(GreedyText('message')
-                    .then(Text('color')
-                        .runs(lambda src, ctx: force_change_online_msg(src, ctx['player'], ctx['message'], ctx['color']))))))
-        .then(Literal('force_offline_change')
-            .then(Text('player')
-                .then(GreedyText('message')
-                    .then(Text('color')
-                        .runs(lambda src, ctx: force_change_offline_msg(src, ctx['player'], ctx['message'], ctx['color']))))))
-    )
-
-def toggle_msg(src: CommandSource, enabled: bool):
-    config = get_config()
-    player = src.player
-    if player and is_modifiable(player):
-        if player not in config:
-            config[player] = {}
-        config[player]['enabled'] = enabled
-        save_config(config)
-        src.reply(f"Your welcome message has been {'enabled' if enabled else 'disabled'}.")
-    else:
-        src.reply("You are not allowed to change your message settings.")
-
-def change_online_msg(src: CommandSource, message: str, color: str):
-    if color not in ALLOWED_COLORS:
-        src.reply("Invalid color! Allowed colors are: " + ", ".join(ALLOWED_COLORS))
-        return
-    
-    config = get_config()
-    player = src.player
-    if player and is_modifiable(player):
-        if player not in config:
-            config[player] = {}
-        config[player]['msg_online'] = message
-        config[player]['color_online'] = color
-        save_config(config)
-        src.reply(f"Your online message has been changed to: '{message}' with color '{color}'.")
-    else:
-        src.reply("You are not allowed to change your message settings.")
-
-def change_offline_msg(src: CommandSource, message: str, color: str):
-    if color not in ALLOWED_COLORS:
-        src.reply("Invalid color! Allowed colors are: " + ", ".join(ALLOWED_COLORS))
-        return
-    
-    config = get_config()
-    player = src.player
-    if player and is_modifiable(player):
-        if player not in config:
-            config[player] = {}
-        config[player]['msg_offline'] = message
-        config[player]['color_offline'] = color
-        save_config(config)
-        src.reply(f"Your offline message has been changed to: '{message}' with color '{color}'.")
-    else:
-        src.reply("You are not allowed to change your message settings.")
-
-def force_change_online_msg(src: CommandSource, player: str, message: str, color: str):
-    if color not in ALLOWED_COLORS:
-        src.reply("Invalid color! Allowed colors are: " + ", ".join(ALLOWED_COLORS))
-        return
-    
-    if src.has_permission(2):
-        config = get_config()
-        if player not in config:
-            config[player] = {}
-        config[player]['msg_online'] = message
-        config[player]['color_online'] = color
-        save_config(config)
-        src.reply(f"{player}'s online message has been changed to: '{message}' with color '{color}'.")
-    else:
-        src.reply("You do not have permission to force change player's online message.")
-
-def force_change_offline_msg(src: CommandSource, player: str, message: str, color: str):
-    if color not in ALLOWED_COLORS:
-        src.reply("Invalid color! Allowed colors are: " + ", ".join(ALLOWED_COLORS))
-        return
-    
-    if src.has_permission(2):
-        config = get_config()
-        if player not in config:
-            config[player] = {}
-        config[player]['msg_offline'] = message
-        config[player]['color_offline'] = color
-        save_config(config)
-        src.reply(f"{player}'s offline message has been changed to: '{message}' with color '{color}'.")
-    else:
-        src.reply("You do not have permission to force change player's offline message.")
-
-def ban_player(src: CommandSource, player: str):
-    if src.has_permission(2):
-        config = get_config()
-        if player not in config:
-            config[player] = {}
-        config[player]['modifiable'] = False
-        save_config(config)
-        src.reply(f"{player} has been banned from changing message settings.")
-    else:
-        src.reply("You do not have permission to ban players.")
-
-def unban_player(src: CommandSource, player: str):
-    if src.has_permission(2):
-        config = get_config()
-        if player not in config:
-            config[player] = {}
-        config[player]['modifiable'] = True
-        save_config(config)
-        src.reply(f"{player} has been unbanned and can now change message settings.")
-    else:
-        src.reply("You do not have permission to unban players.")
-
-def is_modifiable(player: str) -> bool:
-    config = get_config()
-    player_config = config.get(player, {'modifiable': True})
-    return player_config.get('modifiable', True)
-
-# Ensuring the configuration is loaded and saved even if it doesn't exist initially
-config = get_config()
+def show_help(src: CommandSource):
+    help_message = """
+    §6Announce Owner 插件使用说明§r
 save_config(config)

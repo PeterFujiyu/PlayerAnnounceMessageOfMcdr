@@ -2,7 +2,7 @@
 
 ## 插件信息
 - **插件ID**: `announce_player`
-- **版本**: `1.5.1`
+- **版本**: `1.6.2`
 - **名称**: `Announce Player`
 - **作者**: Peter
 - **链接**: [github.com/PeterFujiyu](https://github.com/PeterFujiyu)

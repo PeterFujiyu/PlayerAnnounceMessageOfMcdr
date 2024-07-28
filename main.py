@@ -4,9 +4,9 @@ import os
 import json
 
 PLUGIN_METADATA = {
-    'id': 'announce_owner',
+    'id': 'announce_player',
     'version': '1.5.1',
-    'name': 'Announce Owner',
+    'name': 'Announce Player',
     'author': 'Peter',
     'link': 'github.com/PeterFujiyu'
 }

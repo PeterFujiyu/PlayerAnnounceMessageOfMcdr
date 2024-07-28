@@ -1,9 +1,9 @@
-# Announce Owner 插件使用说明
+# Announce Player 插件使用说明
 
 ## 插件信息
-- **插件ID**: `announce_owner`
+- **插件ID**: `announce_player`
 - **版本**: `1.5.1`
-- **名称**: `Announce Owner`
+- **名称**: `Announce Player`
 - **作者**: Peter
 - **链接**: [github.com/PeterFujiyu](https://github.com/PeterFujiyu)
 

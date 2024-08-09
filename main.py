@@ -25,7 +25,7 @@ def get_config():
     return {}
 
 def save_config(config):
-    with open(CONFIG_PATH, 'w', encoding='utf-8') as f):
+    with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
         json.dump(config, f, ensure_ascii=False, indent=4)
 
 def out_msg(server: ServerInterface, msg: str, color: str):

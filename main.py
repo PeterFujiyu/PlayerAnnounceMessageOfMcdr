@@ -34,7 +34,7 @@ def out_msg(server: ServerInterface, msg: str, color: str):
 def on_player_joined(server: ServerInterface, player: str, info: Info):
     config = get_config()
     player_config = config.get(player, {
-        'enabled': True, 
+        'enabled': False, 
         'msg_online': '欢迎 {player}!', 
         'color_online': 'white',
         'msg_offline': '再见 {player}!', 
@@ -50,7 +50,7 @@ def on_player_joined(server: ServerInterface, player: str, info: Info):
 def on_player_left(server: ServerInterface, player: str):
     config = get_config()
     player_config = config.get(player, {
-        'enabled': True, 
+        'enabled': False, 
         'msg_online': '欢迎 {player}!', 
         'color_online': 'white',
         'msg_offline': '再见 {player}!', 
